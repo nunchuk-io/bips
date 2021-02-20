@@ -29,20 +29,21 @@ The Bitcoin multisig experience has been greatly streamlined under [https://gith
 There are a number of concerns when it comes to setting up a multisig wallet:
 
 # Whether the multisig configuration, such as Signer membership, script type, derivation paths and number of signatures required, is correct and not tampered with.
-# Whether Signer persists the multisig configuration in their respective storage, and under what format.
-# Whether Signer's storage is tamper-proof.
-# Whether Signer subsequently uses the multisig configuration to generate and verify receive and change addresses.
+# Whether the Signer persists the multisig configuration in their respective storage, and under what format.
+# Whether the keys or the multisig configuration are leaked during the setup, which can result in loss of privacy.
+# Whether the Signer's storage is tamper-proof.
+# Whether the Signer subsequently uses the multisig configuration to generate and verify receive and change addresses.
 
 An attacker who can modify the multisig configuration can steal or hold funds to ransom by duping the user into sending funds to the wrong address.
 
-This proposal seeks to address concerns #1 and #2: to mitigate the risk of tampering during the initial setup phase, and to define an interoperable multisig configuration format.
+This proposal seeks to address concerns #1, #2 and #3: to mitigate the risk of tampering during the initial setup phase, and to define an interoperable multisig configuration format.
 
-Concerns #3 and #4 should be handled by Signers and is out of scope of this proposal.
+Concerns #4 and #5 should be handled by Signers and are out of scope of this proposal.
 
 ==Specification==
 
 ===Prerequisites===
-This proposal assumes the parties in the multisig support [https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki BIP-0032], [https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md the descriptor language] and encryption.
+This proposal assumes the parties in the multisig support [https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki BIP-0032], [https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki BIP-0322], [https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md the descriptor language] and encryption.
 
 ===Roles===
 ====Coordinator====
@@ -60,7 +61,7 @@ The Signer is a participating member in the multisig. Its responsibilities inclu
 =====Coordinator=====
 
 * The Coordinator creates a multisig wallet creation session. The Coordinator constructs the multisig script and its policy parameters, such as the total number of signers and the required number of signatures (<tt>M</tt> and <tt>N</tt>).
-* The session should expire after some time period determined by the Coordinator, e.g., 24 hours.
+* The session should expire after some time period determined by the Coordinator, e.g., 24 hours. The timeout allows the encryption key to have lower entropy.
 * If encryption is enabled, the Coordinator distributes a secret <tt>TOKEN</tt> to each Signer over a secure channel. The Signer can use the <tt>TOKEN</tt> to derive an <tt>ENCRYPTION_KEY</tt>. Refer to the Encryption section below for details on the <tt>TOKEN</tt>, the key derivation function and the encryption scheme. Depending on the use case, the Coordinator can decide whether to share one common <tt>TOKEN</tt> for all Signers, or to have one per Signer.
 * If encryption is disabled, <tt>TOKEN</tt> is set to <tt>0</tt>, and all the encryption/decryption steps below can be skipped.
 
@@ -99,11 +100,11 @@ We define three modes of encryption.
 
 # <tt>NO_ENCRYPTION</tt> : the <tt>TOKEN</tt> is set to <tt>0</tt>. Encryption is disabled.
 # <tt>STANDARD</tt> : the <tt>TOKEN</tt> is a 64-bit nonce.
-# <tt>EXTENDED</tt> : the <tt>TOKEN</tt> is a 128-bit nonce.
+# <tt>EXTENDED</tt> : the <tt>TOKEN</tt> is a 96-bit nonce.
 
 The <tt>TOKEN</tt> can be converted to one of these formats:
-* A mnemonic phrase using [https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki BIP-0039] word list (6 words in <tt>STANDARD</tt> mode, 12 words in <tt>EXTENDED</tt> mode)
-* A decimal number (20 digits in <tt>STANDARD</tt> mode, 40 digits in <tt>EXTENDED</tt> mode)
+* A mnemonic phrase using [https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki BIP-0039] word list (6 words in <tt>STANDARD</tt> mode, 9 words in <tt>EXTENDED</tt> mode)
+* * A decimal number. The number must not exceed 2^64 in <tt>STANDARD</tt> mode, and 2^96 in <tt>EXTENDED</tt> mode.
 * A QR code
 * Other formats
 
@@ -142,6 +143,9 @@ There are three ways an attacker can modify the membership set: by changing an e
 For the first two methods, one of the Signers will be able to detect that its membership has been changed or removed, and reject the final descriptor. Thus, it is vital that all participating Signers check that their membership is intact in the descriptor. Even one Signer failing to check for its membership means that the setup could be compromised.
 
 For the third type of attack, the descriptor checksum and visual inspection of the descriptor itself are the only way to guard against malicious members from being inserted into the set.
+
+==Privacy==
+Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and descriptors in plaintext.
 
 ==Acknowledgement==
 
