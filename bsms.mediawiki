@@ -170,7 +170,7 @@ Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and
 
 ==Acknowledgement==
 
-Special thanks to Dmitry Petukhov, Christopher Allen, Craig Raw and others for their feedback on the specification.
+Special thanks to Dmitry Petukhov, Christopher Allen, Craig Raw, Robert Spigler, Gregory Sanders and others for their feedback on the specification.
 
 ==References==
 
