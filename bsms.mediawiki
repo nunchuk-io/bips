@@ -109,11 +109,11 @@ We define three modes of encryption.
 
 # <tt>NO_ENCRYPTION</tt> : the <tt>TOKEN</tt> is set to <tt>0</tt>. Encryption is disabled.
 # <tt>STANDARD</tt> : the <tt>TOKEN</tt> is a 64-bit nonce.
-# <tt>EXTENDED</tt> : the <tt>TOKEN</tt> is a 96-bit nonce.
+# <tt>EXTENDED</tt> : the <tt>TOKEN</tt> is a 96-bit, 160-bit or 224-bit nonce.
 
 The <tt>TOKEN</tt> can be converted to one of these formats:
-* A mnemonic phrase using [https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki BIP-0039] word list (6 words in <tt>STANDARD</tt> mode, 9 words in <tt>EXTENDED</tt> mode).
-* A decimal number. The number must not exceed 2^64 in <tt>STANDARD</tt> mode, and 2^96 in <tt>EXTENDED</tt> mode.
+* A mnemonic phrase using [https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki BIP-0039] word list (6 words in <tt>STANDARD</tt> mode; 9, 15 or 21 words in <tt>EXTENDED</tt> mode).
+* A decimal number. The number must not exceed the maximum value of the nonce. 
 * A QR code.
 * Other formats.
 
