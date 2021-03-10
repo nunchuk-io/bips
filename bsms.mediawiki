@@ -175,7 +175,7 @@ For the third type of attack, visual inspection of the descriptor <tt>CHECKSUM</
 ==Privacy==
 Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and descriptors in plaintext.
 
-If the parties wish to have stronger privacy, it is recommended to use a higher number of bits for the <tt>TOKEN</tt>, and to completely erase knowledge of the <tt>TOKEN</tt> afterwards.
+If the parties wish to have stronger privacy, it is recommended to use a higher number of bits for the <tt>TOKEN</tt>, and to completely erase knowledge of the <tt>TOKEN</tt> after the setup ceremony.
 
 ==Acknowledgement==
 
