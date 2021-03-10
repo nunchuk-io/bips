@@ -162,18 +162,20 @@ Also refer to [https://github.com/BlockchainCommons/Research/blob/master/papers/
 
 ==Security==
 
-This proposal introduces two layers of protection. The first one is a temporary, secret token, used to encrypt and authenticate the two rounds of communication between the Signer and the Coordinator. The second one is the descriptor checksum.
+This proposal introduces two layers of protection. The first one is a temporary, secret <tt>TOKEN</tt>, used to encrypt and authenticate the two rounds of communication between the Signer and the Coordinator. The second one is the descriptor <tt>CHECKSUM</tt>.
 
-The token is only needed during the setup phase, and can be safely thrown away afterwards. The token does not guarantee that the Signer membership set is not modified, since that depends on the overall security of all parties in the setup, but it can make it significantly harder for an attacker to do so.
+The <tt>TOKEN</tt> is only needed during the setup phase, and can be safely thrown away afterwards. The <tt>TOKEN</tt> does not guarantee that the Signer membership set is not modified, since that depends on the overall security of all parties in the setup, but it can make it significantly harder for an attacker to do so.
 
 There are three ways an attacker can modify the membership set: by changing an existing member, by removing an existing member, or by adding a new member.
 
 For the first two methods, one of the Signers will be able to detect that its membership has been changed or removed, and reject the final descriptor. Thus, it is vital that all participating Signers check that their membership is intact in the descriptor. Even one Signer failing to check for its membership means that the setup could be compromised.
 
-For the third type of attack, visual inspection of the descriptor checksum and other policy parameters such as <tt>N</tt> is the only way to guard against malicious members from being inserted into the set.
+For the third type of attack, visual inspection of the descriptor <tt>CHECKSUM</tt> and other policy parameters such as <tt>N</tt> is the only way to guard against malicious members from being inserted into the set.
 
 ==Privacy==
 Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and descriptors in plaintext.
+
+If the parties wish to have stronger privacy, it is recommended to use a higher number of bits for the <tt>TOKEN</tt>, and to completely erase knowledge of the <tt>TOKEN</tt> afterwards.
 
 ==Acknowledgement==
 
