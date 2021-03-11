@@ -84,6 +84,7 @@ The Signer is a participating member in the multisig. Its responsibilities inclu
 * The Coordinator gathers key records from all participating Signers. Abort the setup if there are fewer than <tt>N</tt> unique key records when the wallet setup session expires.
 * For each key record, the Coordinator extracts the <tt>MAC</tt> from the data, sets <tt>IV</tt> to the first 16 bytes of the <tt>MAC</tt>, then decrypts the ciphertext using the <tt>ENCRYPTION_KEY</tt> and <tt>IV</tt>.
 * The Coordinator verifies that the included <tt>MAC</tt> is valid given the plaintext.
+* The Coordinator verifies that the key records have compatible specification versions.
 * The Coordinator verifies that the included <tt>SIG</tt> is valid given the <tt>KEY</tt>.
 * If all key records look good, the Coordinator fills in all necessary information to generate a descriptor record.
 * The first line in the descriptor record must be the specification version (<tt>BSMS 1.0</tt> as of this writing). The second line must be the descriptor string plus a <tt>CHECKSUM</tt>, all in one line. The <tt>CHECKSUM</tt> has [https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#checksums BECH32 encoding].
