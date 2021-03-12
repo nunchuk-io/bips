@@ -63,7 +63,7 @@ The Signer is a participating member in the multisig. Its responsibilities inclu
 
 =====Coordinator=====
 
-* The Coordinator creates a multisig wallet creation session. The Coordinator constructs the multisig script and its policy parameters, such as the total number of signers and the required number of signatures (<tt>M</tt> and <tt>N</tt>).
+* The Coordinator creates a multisig wallet creation session. The Coordinator constructs the multisig script and its policy parameters, such as the total number of Signers and the required number of signatures (<tt>M</tt> and <tt>N</tt>).
 * The session should expire after some time period determined by the Coordinator, e.g., 24 hours. The timeout allows the encryption key to have lower entropy.
 * If encryption is enabled, the Coordinator distributes a secret <tt>TOKEN</tt> to each Signer over a secure channel. The Signer can use the <tt>TOKEN</tt> to derive an <tt>ENCRYPTION_KEY</tt>. Refer to the Encryption section below for details on the <tt>TOKEN</tt>, the key derivation function and the encryption scheme. Depending on the use case, the Coordinator can decide whether to share one common <tt>TOKEN</tt> for all Signers, or to have one per Signer.
 * If encryption is disabled, the <tt>TOKEN</tt> is set to <tt>0</tt>, and all the encryption/decryption steps below can be skipped.
@@ -101,7 +101,7 @@ The Signer is a participating member in the multisig. Its responsibilities inclu
 * The Signer verifies the descriptor’s <tt>CHECKSUM</tt>. Abort the setup if the <tt>CHECKSUM</tt> is incorrect.
 * The Signer checks that its <tt>KEY</tt> is included in the descriptor, using path and fingerprint information provided. The check must perform an exact match on the <tt>KEY</tt>s, and not using shortcuts such as matching fingerprints (which is trivial to spoof). Abort the setup if it doesn’t detect its own <tt>KEY</tt>.
 * For confirmation, the Signer must display to the user the <tt>CHECKSUM</tt> and the policy parameters, such as <tt>M</tt>, <tt>N</tt> and the position(s) of its own XPUB in the policy script. The total number of Signers, <tt>N</tt>, is important to prevent a <tt>KEY</tt> insertion attack. The position is important for scripts where key order matters. When applicable, all positions of the XPUB must be displayed. 
-* Participating Signers must check with each other that all Signers have verified the descriptor and has the same confirmation (except for the positions).
+* Parties must check with each other that all Signers have verified the descriptor and has the same confirmation (except for the positions).
 * If all checks pass, the Signer must persist the descriptor record in its storage.
 * The Signer can choose to further restrict post-XPUB derivation paths, such as to those defined in [https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki BIP-0044].
 
@@ -163,15 +163,15 @@ Also refer to [https://github.com/BlockchainCommons/Research/blob/master/papers/
 
 ==Security==
 
-This proposal introduces two layers of protection. The first one is a temporary, secret <tt>TOKEN</tt>, used to encrypt and authenticate the two rounds of communication between the Signer and the Coordinator. The second one is the descriptor <tt>CHECKSUM</tt>.
+This proposal introduces two layers of protection. The first one is a temporary, secret <tt>TOKEN</tt>. The second one is the descriptor <tt>CHECKSUM</tt>.
 
-The <tt>TOKEN</tt> is only needed during the setup phase, and can be safely thrown away afterwards. The <tt>TOKEN</tt> does not guarantee that the Signer membership set is not modified, since that depends on the overall security of all parties in the setup, but it can make it significantly harder for an attacker to do so.
+The <tt>TOKEN</tt> is used to encrypt the two rounds of communication between the Signer and the Coordinator. A <tt>MAC</tt> is also generated from the <tt>TOKEN</tt> and plaintext to authenticate the data being exchanged. The <tt>TOKEN</tt> is only needed during the setup phase, and can be safely discarded afterwards.
 
-There are three ways an attacker can modify the membership set: by changing an existing member, by removing an existing member, or by adding a new member.
+The descriptor <tt>CHECKSUM</tt>, on the other hand, can be used to verify the integrity of the multisig configuration. An attacker who tampers with the multisig configuration must also change the descriptor <tt>CHECKSUM</tt>. Parties must check with each other that all Signers have the same <tt>CHECKSUM</tt> to reduce the chance of tampering. This is true even post-setup, and can be done as a periodic check. The <tt>CHECKSUM</tt> must be persisted along with the descriptor in each Signer’s storage.
 
-For the first two methods, one of the Signers will be able to detect that its membership has been changed or removed, and reject the final descriptor. Thus, it is vital that all participating Signers check that their membership is intact in the descriptor. Even one Signer failing to check for its membership means that the setup could be compromised.
-
-For the third type of attack, visual inspection of the descriptor <tt>CHECKSUM</tt> and other policy parameters such as <tt>N</tt> is the only way to guard against malicious members from being inserted into the set.
+The <tt>TOKEN</tt> and the <tt>CHECKSUM</tt> can’t guarantee complete protection, since that depends on the overall security of all parties in the setup, but they can make it significantly harder for an attacker to do so.
+ 
+Visual inspection is an unavoidable part of the setup process. In the final verification step, the Signer must display to the user the <tt>CHECKSUM</tt> and important policy parameters such as <tt>M</tt> and <tt>N</tt> for confirmation. This is especially crucial for setups where the Coordinator cannot be trusted.
 
 ==Privacy==
 Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and descriptors in plaintext.
