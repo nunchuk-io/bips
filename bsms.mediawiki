@@ -167,11 +167,9 @@ This proposal introduces two layers of protection. The first one is a temporary,
 
 The <tt>TOKEN</tt> is used to encrypt the two rounds of communication between the Signer and the Coordinator. A <tt>MAC</tt> is also generated from the <tt>TOKEN</tt> and plaintext to authenticate the data being exchanged. The <tt>TOKEN</tt> is only needed during the setup phase, and can be safely discarded afterwards.
 
-The descriptor <tt>CHECKSUM</tt>, on the other hand, can be used to verify the integrity of the multisig configuration. An attacker who tampers with the multisig configuration must also change the descriptor <tt>CHECKSUM</tt>. Parties must check with each other that all Signers have the same <tt>CHECKSUM</tt> to reduce the chance of tampering. This is true even post-setup, and can be done as a periodic check. The <tt>CHECKSUM</tt> must be persisted along with the descriptor in each Signer’s storage.
+The descriptor <tt>CHECKSUM</tt>, on the other hand, can be used to verify the integrity of the multisig configuration. An attacker who tampers with the multisig configuration must also change the descriptor <tt>CHECKSUM</tt>. Parties must check with each other that all Signers have the same <tt>CHECKSUM</tt>, along with the policy parameters, to reduce the chance of tampering. The <tt>CHECKSUM</tt> must be persisted along with the descriptor in each Signer’s storage.
 
-The <tt>TOKEN</tt> and the <tt>CHECKSUM</tt> can’t guarantee complete protection, since that depends on the overall security of all parties in the setup, but they can make it significantly harder for an attacker to do so.
-
-Visual inspection is an unavoidable part of the setup process. In the final verification step, the Signer must display to the user the <tt>CHECKSUM</tt> and important policy parameters such as <tt>M</tt> and <tt>N</tt> for confirmation. This is especially crucial for setups where the Coordinator cannot be trusted.
+The <tt>TOKEN</tt> and the <tt>CHECKSUM</tt> can’t guarantee complete protection, since that depends on the overall security of all parties in the setup, but they can make it significantly harder for an attacker to tamper with the multisig configuration.
 
 ==Privacy==
 Encryption helps improve the privacy of the wallet by avoiding sharing XPUBs and descriptors in plaintext.
