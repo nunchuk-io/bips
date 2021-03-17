@@ -127,7 +127,7 @@ The flexibility in the data format allows each Signer to customize the User Expe
 ====Key Derivation====
 The key derivation function is [https://tools.ietf.org/html/rfc2898 PBKDF2], with PRF = SHA512. Specifically:
 
-<tt>DK = PBKDF2(PRF, Password, Salt, c, dkLen)</tt>
+<tt>DKey = PBKDF2(PRF, Password, Salt, c, dkLen)</tt>
 
 Whereas:
 
@@ -136,21 +136,21 @@ Whereas:
 * Salt = <tt>TOKEN</tt>
 * c = 2048
 * dkLen = 256
-* DK = Derived <tt>ENCRYPTION_KEY</tt>
+* DKey = Derived <tt>ENCRYPTION_KEY</tt>
 
 ====Encryption Scheme====
 The encryption scheme is [https://tools.ietf.org/html/rfc3686 AES-256-CTR].
 
 <tt>MAC = HMAC-SHA256(HMAC_Key, hex-encoded TOKEN || Data)</tt>
 
-<tt>IV = first 16 bytes of MAC</tt>
+<tt>IV = First 16 bytes of MAC</tt>
 
-<tt>Ciphertext = AES-256-CTR-Encrypt(Plaintext, Key, IV)</tt>
+<tt>Ciphertext = AES-256-CTR-Encrypt(Plaintext, DKey, IV)</tt>
 
-<tt>Plaintext = AES-256-CTR-Decrypt(Ciphertext, Key, IV)</tt>
+<tt>Plaintext = AES-256-CTR-Decrypt(Ciphertext, DKey, IV)</tt>
 
 Whereas:
-* Key = <tt>ENCRYPTION_KEY</tt>
+* DKey = <tt>ENCRYPTION_KEY</tt>
 * HMAC_Key = SHA256(<tt>ENCRYPTION_KEY</tt>)
 * Data = the plaintext, e.g. the entire key record in round 1 and the entire descriptor record in round 2
 
