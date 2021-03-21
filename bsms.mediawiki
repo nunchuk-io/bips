@@ -338,7 +338,7 @@ IAHJoSooAB9x/hkx3jPic/Xk0vk6pxMRdXOobihJcIYqPRORWyLGlT/YS8b49gEfhu443ydI3dOrHIqV
 ** PRIVATE_KEY (m/48’/0’/1’): L3Gdw7FAZhzVSU7BEH9DxSmUr4pTx6hRLrmydw7G34zRr47aDkkC
 ** XPUB (m/48’/0’/1’): xpub6CnVHj6XZtf4H8GuvYitu5oxpugV24ir4y2cXuK65TvrD6gy4DQS3ebutP7TQECXoAmNRED1ejy5ikggbAyaUwXUvAHBhJt4tAb1FzY7KvX
 ** Legacy signature
-** <tt>signer_2_key.bsms</tt>:
+** <tt>signer_3_key.bsms</tt>:
 <pre>BSMS 1.0
 8f7e1ec49419b718f4e6a813
 [cdb4d36a/48'/0'/1']xpub6CnVHj6XZtf4H8GuvYitu5oxpugV24ir4y2cXuK65TvrD6gy4DQS3ebutP7TQECXoAmNRED1ejy5ikggbAyaUwXUvAHBhJt4tAb1FzY7KvX
